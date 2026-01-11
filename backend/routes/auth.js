@@ -1,18 +1,19 @@
+
+
 import express from "express";
 import User from "../models/User.js";
 import bcrypt from "bcrypt";
+import jwt from "jsonwebtoken";
 
 const router = express.Router();
 
 /* User Registration */
 router.post("/register", async (req, res) => {
   try {
-    /* Salting and Hashing the Password */
     const salt = await bcrypt.genSalt(10);
     const hashedPass = await bcrypt.hash(req.body.password, salt);
 
-    /* Create a new user */
-    const newuser = await new User({
+    const newUser = new User({
       userType: req.body.userType,
       userFullName: req.body.userFullName,
       admissionId: req.body.admissionId,
@@ -24,39 +25,65 @@ router.post("/register", async (req, res) => {
       mobileNumber: req.body.mobileNumber,
       email: req.body.email,
       password: hashedPass,
-      isAdmin: req.body.isAdmin,
+      isAdmin: req.body.isAdmin || false,
     });
 
-    /* Save User and Return */
-    const user = await newuser.save();
-    res.status(200).json(user);
+    const user = await newUser.save();
+    res.status(201).json(user);
   } catch (err) {
-    console.log(err);
+    res.status(500).json(err);
   }
 });
 
 /* User Login */
+// router.post("/signin", async (req, res) => {
+//   try {
+//     const { admissionId, employeeId, password } = req.body;
+
+//     const user = admissionId
+//       ? await User.findOne({ admissionId })
+//       : await User.findOne({ employeeId });
+
+//     if (!user) {
+//       return res.status(404).json({ message: "User not found" });
+//     }
+
+//     const validPass = await bcrypt.compare(password, user.password);
+//     if (!validPass) {
+//       return res.status(400).json({ message: "Invalid password" });
+//     }
+
+//     const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET);
+
+//     res.status(200).json({ token, user });
+//   } catch (err) {
+//     res.status(500).json(err);
+//   }
+// });
 router.post("/signin", async (req, res) => {
   try {
-    console.log(req.body, "req");
-    const user = req.body.admissionId
-      ? await User.findOne({
-          admissionId: req.body.admissionId,
-        })
-      : await User.findOne({
-          employeeId: req.body.employeeId,
-        });
+    console.log("BODY:", req.body);
 
-    console.log(user, "user");
+    const { admissionId, employeeId, password } = req.body;
 
-    !user && res.status(404).json("User not found");
+    const user = admissionId
+      ? await User.findOne({ admissionId })
+      : await User.findOne({ employeeId });
 
-    const validPass = await bcrypt.compare(req.body.password, user.password);
-    !validPass && res.status(400).json("Wrong Password");
+    console.log("USER:", user);
 
-    res.status(200).json(user);
+    if (!user) return res.status(404).json("User not found");
+    if (!user.password) return res.status(500).json("Password field missing in DB");
+
+    const valid = await bcrypt.compare(password, user.password);
+    console.log("VALID:", valid);
+
+    const token = jwt.sign({ id: user._id }, "library_secret");
+
+    res.json({ token, user });
   } catch (err) {
-    console.log(err);
+    console.error("LOGIN ERROR:", err);
+    res.status(500).json(err.message);
   }
 });
 

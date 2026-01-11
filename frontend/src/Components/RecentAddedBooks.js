@@ -4,7 +4,7 @@ import './RecentAddedBooks.css'
 function RecentAddedBooks() {
     return (
         <div className='recentaddedbooks-container'>
-            <h className='recentbooks-title'>Recent Uploads</h>
+            <h3 className='recentbooks-title'>Recent Uploads</h3>
             <div className='recentbooks'>
                 <div className='images'>
                     <img className='recent-book' src='https://inkinmytea.files.wordpress.com/2011/12/apj.jpg?w=640' alt=''></img>
