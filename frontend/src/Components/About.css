@@ -4,7 +4,7 @@
     background-color: rgb(16,25,13);
 }
 
-/* Mobile View */
+
 @media screen and (max-width: 768px){
     .about-data{
         display: grid;
@@ -20,7 +20,7 @@
     }
 }
 
-/* Desktop View */
+
 .about-title{
     position: relative;
     color: rgb(238,129,30);
