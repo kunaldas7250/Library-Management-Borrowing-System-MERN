@@ -19,7 +19,7 @@ import Return from './Components/Return';
 import PowerSettingsNewIcon from '@material-ui/icons/PowerSettingsNew';
 
 
-/* Semantic UI Dropdown Styles Import */
+
 const styleLink = document.createElement("link");
 styleLink.rel = "stylesheet";
 styleLink.href = "https://cdn.jsdelivr.net/npm/semantic-ui/dist/semantic.min.css";
@@ -30,7 +30,7 @@ function AdminDashboard() {
     const [active, setActive] = useState("addbooks")
     const [sidebar, setSidebar] = useState(false)
 
-    /* Logout Function*/
+  
     const logout = () => {
         localStorage.removeItem("user");
         window.location.reload();
@@ -46,7 +46,7 @@ function AdminDashboard() {
                     </IconButton>
                 </div>
 
-                {/* Sidebar */}
+                
                 <div className={sidebar ? "dashboard-options active" : "dashboard-options"}>
                     <div className='dashboard-logo'>
                         <LibraryBooksIcon style={{ fontSize: 50 }} />
