@@ -1,5 +1,4 @@
 
-
 import express from "express";
 import User from "../models/User.js";
 import bcrypt from "bcrypt";
@@ -7,7 +6,7 @@ import jwt from "jsonwebtoken";
 
 const router = express.Router();
 
-/* User Registration */
+
 router.post("/register", async (req, res) => {
   try {
     const salt = await bcrypt.genSalt(10);
@@ -35,31 +34,6 @@ router.post("/register", async (req, res) => {
   }
 });
 
-/* User Login */
-// router.post("/signin", async (req, res) => {
-//   try {
-//     const { admissionId, employeeId, password } = req.body;
-
-//     const user = admissionId
-//       ? await User.findOne({ admissionId })
-//       : await User.findOne({ employeeId });
-
-//     if (!user) {
-//       return res.status(404).json({ message: "User not found" });
-//     }
-
-//     const validPass = await bcrypt.compare(password, user.password);
-//     if (!validPass) {
-//       return res.status(400).json({ message: "Invalid password" });
-//     }
-
-//     const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET);
-
-//     res.status(200).json({ token, user });
-//   } catch (err) {
-//     res.status(500).json(err);
-//   }
-// });
 router.post("/signin", async (req, res) => {
   try {
     console.log("BODY:", req.body);
